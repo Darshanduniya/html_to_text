@@ -1,0 +1,20 @@
+from html.parser import HTMLParser
+from html import unescape
+
+class HTMLToTextParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.text_content = []
+
+    def handle_data(self, data):
+        self.text_content.append(data)
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'br':
+            self.text_content.append('\n')
+
+def html_to_text(html_content):
+    parser = HTMLToTextParser()
+    parser.feed(html_content)
+    parser.close()
+    return unescape(''.join(parser.text_content))
